@@ -31,7 +31,7 @@ func fetchInfo(url string) (info []byte, err error) {
 }
 
 // GetWeather gets weather
-func GetWeather(woeid int) (weather Weather) {
+func GetWeather(woeid int) (weather  Weather) {
 	weather = Weather{}
 	apiUrl := fmt.Sprintf("https://www.metaweather.com/api/location/%d/", woeid)
 	resp, _ := fetchInfo(apiUrl)
@@ -61,25 +61,25 @@ func debugWeather(woeid int) {
 
 // UnmarshalJSON interface loads the reported temperatures into the Temp
 // type during a JSON unmarshaling.
-func (this *Temp) UnmarshalJSON(b []byte) (err error) {
-	this.TempC, _ = strconv.ParseFloat(string(b), 64)
-	this.TempF = (this.TempC * 1.8) + 32
+func (temps *Temp) UnmarshalJSON(b []byte) (err error) {
+	temps.TempC, _ = strconv.ParseFloat(string(b), 64)
+	temps.TempF = (temps.TempC * 1.8) + 32
 
 	return
 }
 
 // UnmarshalJSON takes a comma-seperated string ("Lat,Long") into a LatLong type.
-func (this *LatLong) UnmarshalJSON(b []byte) (err error) {
-	this.Latitude = 0
-	this.Longitude = 0
+func (location *LatLong) UnmarshalJSON(b []byte) (err error) {
+	location.Latitude = 0
+	location.Longitude = 0
 	unquoted := strings.Replace(string(b), "\"", "", -1)
 	coords := strings.Split(unquoted, ",")
 	if len(coords) == 2 {
 		// Only set latitude and longitude if we have the coordinates.
 		latitude, _ := strconv.ParseFloat(coords[0], 64)
 		longitude, _ := strconv.ParseFloat(coords[1], 64)
-		this.Latitude = latitude
-		this.Longitude = longitude
+		location.Latitude = latitude
+		location.Longitude = longitude
 	}
 
 	return

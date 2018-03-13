@@ -1,3 +1,6 @@
+/*
+This tool will fetch weather from multiples sources.
+ */
 package main
 
 import (
